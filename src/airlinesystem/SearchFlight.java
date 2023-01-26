@@ -278,13 +278,13 @@ public class SearchFlight extends javax.swing.JInternalFrame {
             }
             else{
                 
-                String source = rs.getString("sourcef");
-                String destination = rs.getString("destinationf");
-                String deptdate = rs.getString("datef");
+                String source = rs.getString("src");
+                String destination = rs.getString("destination");
+                String deptdate = rs.getString("deptdate");
                 Date datefl = new SimpleDateFormat("YYYY-MM-DD").parse(deptdate);
-                String departure = rs.getString("departuretimef");
-                String arrival = rs.getString("arrivalf");
-                String price = rs.getString("pricef");
+                String departure = rs.getString("departure");
+                String arrival = rs.getString("arrival");
+                String price = rs.getString("price");
                 
                 
                 sourcesf.setText(source);
