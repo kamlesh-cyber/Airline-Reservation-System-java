@@ -36,7 +36,6 @@ public class Main extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
 
@@ -104,9 +103,6 @@ public class Main extends javax.swing.JFrame {
             }
         });
         jMenu3.add(jMenuItem5);
-
-        jMenuItem6.setText("Ticket Status");
-        jMenu3.add(jMenuItem6);
 
         jMenuBar1.add(jMenu3);
 
@@ -231,7 +227,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     // End of variables declaration//GEN-END:variables
 }

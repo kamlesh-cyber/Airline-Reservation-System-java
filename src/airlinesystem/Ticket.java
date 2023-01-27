@@ -8,11 +8,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-//import java.sql.ResultSetMetaData;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -170,6 +173,12 @@ public class Ticket extends javax.swing.JInternalFrame {
             }
         });
 
+        tdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tdateActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -249,8 +258,18 @@ public class Ticket extends javax.swing.JInternalFrame {
         );
 
         jButton2.setText("Book");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Cancel");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -309,6 +328,45 @@ public class Ticket extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tarrivalActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            // ToDo add your handling code here:
+            
+            String source = bsource.getSelectedItem().toString();
+            String destination = bdestination.getSelectedItem().toString();
+            
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/airline", "root", "root");
+            pt = con.prepareStatement("Select * from flight where src = ? and destination = ?");
+            pt.setString(1, source);
+            pt.setString(2, destination);
+            
+            ResultSet rs = pt.executeQuery();
+            ResultSetMetaData rm = rs.getMetaData();
+            
+            DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
+            table.setRowCount(0);
+            
+            
+            while(rs.next()){
+                
+                Vector vect = new Vector();
+                
+                for(int i=1; i<=5; i++){
+                    vect.add("flightID");
+                    vect.add("deptdate");
+                    vect.add("departure");
+                    vect.add("arrival");
+                    vect.add("price");
+                }
+                table.addRow(vect);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Ticket.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Ticket.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -323,26 +381,25 @@ public class Ticket extends javax.swing.JInternalFrame {
         try {
             // TODO add your handling code here:
             
-            //String source = bsource.getSelectedItem().toString();
-            //String destination = bdestination.getSelectedItem().toString();
+            //String booksource = bsource.getSelectedItem().toString();
+            //String bookdestination = bdestination.getSelectedItem().toString();
             
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost/airline", "root", "root");
             //pt = con.prepareStatement("insert into customer(custID, fname, lname, aadhar, passport, gender, addres, dob, contact) values(?,?,?,?,?,?,?,?,?)");
-            pt = con.prepareStatement("Select * from flight where flightID = ?");
+            pt = con.prepareStatement("Select * from ticket where flightID = ?");
             pt.setString(1, id);
-            //pt.setString(2, destination);
             
             ResultSet rs = pt.executeQuery();
             
             //getting all the data from the database having a certain flightID
             
-            String source = rs.getString("tsource");
-            String destination = rs.getString("tdestination");
-            String date = rs.getString("tdate");
-            String departure = rs.getString("tdeparturetime");
-            String arrival = rs.getString("tarrival");
-            String price = rs.getString("tprice");
+            String source = rs.getString("source");
+            String destination = rs.getString("destination");
+            String date = rs.getString("date");
+            String departure = rs.getString("departuretime");
+            String arrival = rs.getString("arrival");
+            String price = rs.getString("price");
             
             tsource.setText(source);
             tdestination.setText(destination);
@@ -358,6 +415,63 @@ public class Ticket extends javax.swing.JInternalFrame {
         }
         
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            String custid = custID.getText();
+            
+            
+            
+            
+            String flightid = flightID.getText();
+            String source = tsource.getText();
+            String destination = tdestination.getText();
+            String date = tdate.getText();
+            
+//            DateFormat da = new SimpleDateFormat("yyyy-MM-DD");
+//            String date;
+//            date = da.format(tdate.getDate());
+            
+            String departure = tdeparturetime.getText();
+            String arrival = tarrival.getText();
+            String price = tprice.getText();
+            
+            
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/airline", "root", "root");
+            pt = con.prepareStatement("insert into ticket(custID, flightID, source, destination, date, deaprture, arrival, price) values(?,?,?,?,?,?,?,?)");
+            
+            pt.setString(1,custid);
+            pt.setString(1,flightid);
+            pt.setString(2,source);
+            pt.setString(3,destination);
+            pt.setString(4,date);
+            pt.setString(5,departure);
+            pt.setString(6,arrival);
+            pt.setString(7,price);
+            
+            pt.executeUpdate();           
+            
+            JOptionPane.showMessageDialog(null, "Ticet Booked successfully");
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AddCustomer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(AddCustomer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void tdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tdateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tdateActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
